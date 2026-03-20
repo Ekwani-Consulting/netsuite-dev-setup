@@ -78,7 +78,7 @@ Since the setup tool lives in a private repository, your computer needs to be au
 Type the following command and press Enter:
 
 ```bash
-npx github:ekwani-consulting/netsuite-setup
+npx github:Ekwani-Consulting/netsuite-dev-setup
 ```
 
 **What to expect:**
