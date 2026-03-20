@@ -241,8 +241,8 @@ describe('checkCommand', () => {
 });
 
 describe('checkPrerequisites', () => {
-  test('returns an object with node, npm, git keys', () => {
-    const result = checkPrerequisites();
+  test('returns an object with node, npm, git keys', async () => {
+    const result = await checkPrerequisites();
     expect(result).toHaveProperty('node');
     expect(result).toHaveProperty('npm');
     expect(result).toHaveProperty('git');
