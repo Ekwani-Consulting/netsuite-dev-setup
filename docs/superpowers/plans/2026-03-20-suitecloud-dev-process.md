@@ -271,7 +271,7 @@ function checkCommand(command, args) {
   }
 }
 
-function checkPrerequisites() {
+async function checkPrerequisites() {
   console.log('');
   console.log('  Checking prerequisites...');
   console.log('');
