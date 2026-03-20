@@ -48,11 +48,30 @@ cd ~/Projects
 
 ### Step 3: Make Sure You Have GitHub Access
 
-Since the setup tool lives in a private repository, your computer needs to be authenticated with GitHub. The easiest way:
+Since the setup tool lives in a private repository, your computer needs to be authenticated with GitHub. Pick one of these options:
+
+**Option A: GitHub Desktop (recommended for beginners)**
 
 1. **Download and install GitHub Desktop** from https://desktop.github.com
 2. **Sign in** with your GitHub account (the one that has access to the Ekwani Consulting organization)
 3. That's it -- signing into GitHub Desktop automatically sets up your Git credentials
+
+**Option B: HTTPS + Git Credential Manager**
+
+1. Install **Git** from https://git-scm.com (on Windows, Git Credential Manager is bundled with it; on macOS, install via `brew install git` or Xcode Command Line Tools)
+2. Clone any private Ekwani Consulting repo to trigger the login flow:
+   ```bash
+   git clone https://github.com/ekwani-consulting/netsuite-setup.git /tmp/test-auth
+   ```
+3. A browser window will open -- sign in with your GitHub account
+4. Your credentials are now cached automatically. You can delete the test clone: `rm -rf /tmp/test-auth`
+
+**Option C: SSH key (for experienced developers)**
+
+1. Generate an SSH key: `ssh-keygen -t ed25519 -C "your.email@company.com"`
+2. Add the public key to your GitHub account: **Settings > SSH and GPG keys > New SSH key**
+3. Paste the contents of `~/.ssh/id_ed25519.pub`
+4. Test it works: `ssh -T git@github.com`
 
 ### Step 4: Run the Setup Tool
 
