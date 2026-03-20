@@ -1,0 +1,328 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>NetSuite Developer Guide - Ekwani Consulting</title>
+<style>
+  body { font-family: Calibri, 'Segoe UI', sans-serif; font-size: 11pt; color: #333; max-width: 800px; margin: 40px auto; padding: 0 20px; line-height: 1.6; }
+  h1 { font-size: 16pt; font-weight: bold; color: #278575; border-bottom: 2px solid #7CD9C9; padding-bottom: 6px; margin-top: 40px; }
+  h2 { font-size: 13pt; font-weight: bold; color: #278575; margin-top: 28px; }
+  h3 { font-size: 11pt; font-weight: bold; color: #278575; }
+  code { background: #f4f4f4; padding: 2px 6px; border-radius: 3px; font-size: 10pt; }
+  pre { background: #f4f4f4; padding: 12px 16px; border-radius: 4px; border-left: 3px solid #278575; overflow-x: auto; font-size: 10pt; line-height: 1.5; }
+  pre code { background: none; padding: 0; }
+  table { border-collapse: collapse; width: 100%; margin: 16px 0; }
+  th { background: #7CD9C9; color: #fff; font-weight: bold; font-size: 10pt; text-align: left; padding: 8px 12px; }
+  td { border: 1px solid #ddd; padding: 8px 12px; font-size: 10pt; }
+  tr:nth-child(even) td { background: #f9f9f9; }
+  ul, ol { padding-left: 24px; }
+  li { margin-bottom: 4px; }
+  .header { color: #888; font-size: 10pt; border-bottom: 1px solid #ddd; padding-bottom: 8px; margin-bottom: 30px; }
+  .footer { color: #888; font-size: 9pt; border-top: 1px solid #ddd; padding-top: 8px; margin-top: 40px; }
+  .warning { background: #fff3cd; border-left: 3px solid #ffc107; padding: 10px 14px; margin: 12px 0; border-radius: 2px; }
+  .tip { background: #e8f5f1; border-left: 3px solid #278575; padding: 10px 14px; margin: 12px 0; border-radius: 2px; }
+  a { color: #278575; }
+</style>
+</head>
+<body>
+
+<div class="header">Ekwani Consulting, LLC</div>
+
+<h1 style="border:none; font-size:24pt; text-align:center; margin-top:0;">NetSuite Developer Guide</h1>
+<p style="text-align:center; color:#666;">SuiteCloud Development Process for Ekwani Consulting</p>
+
+<h1>1. Running the Setup Tool</h1>
+
+<p>The setup tool automates the entire first-time setup process. Follow these steps carefully.</p>
+
+<h2>Step 1: Open Your Terminal</h2>
+
+<p>On macOS:</p>
+<ul>
+  <li>Open Finder &gt; Applications &gt; Utilities &gt; Terminal</li>
+  <li>Or press <code>Cmd + Space</code>, type "Terminal", and press Enter</li>
+</ul>
+
+<p>On Windows:</p>
+<ul>
+  <li>Press the Windows key, type "PowerShell", and press Enter</li>
+  <li>Or press <code>Windows key + R</code>, type <code>cmd</code>, and press Enter</li>
+</ul>
+
+<h2>Step 2: Navigate to Your Projects Folder</h2>
+
+<p>Type the following and press Enter:</p>
+<pre><code>cd ~/Projects</code></pre>
+
+<p>If this folder doesn't exist yet, create it first:</p>
+<pre><code>mkdir ~/Projects
+cd ~/Projects</code></pre>
+
+<h2>Step 3: Make Sure You Have GitHub Access</h2>
+
+<p>Since the setup tool lives in a private repository, your computer needs to be authenticated with GitHub. Pick one of these options:</p>
+
+<p><strong>Option A: GitHub Desktop (recommended for beginners)</strong></p>
+<ol>
+  <li>Download and install GitHub Desktop from <a href="https://desktop.github.com">https://desktop.github.com</a></li>
+  <li>Sign in with your GitHub account (the one that has access to the Ekwani Consulting organization)</li>
+  <li>That's it - signing into GitHub Desktop automatically sets up your Git credentials</li>
+</ol>
+
+<p><strong>Option B: HTTPS + Git Credential Manager</strong></p>
+<ol>
+  <li>Install Git from <a href="https://git-scm.com">https://git-scm.com</a> (on Windows, Git Credential Manager is bundled; on macOS, install via <code>brew install git</code> or Xcode Command Line Tools)</li>
+  <li>Clone any private Ekwani Consulting repo to trigger the login flow</li>
+  <li>A browser window will open - sign in with your GitHub account</li>
+  <li>Your credentials are now cached automatically</li>
+</ol>
+
+<p><strong>Option C: SSH key (for experienced developers)</strong></p>
+<ol>
+  <li>Generate an SSH key: <code>ssh-keygen -t ed25519 -C "your.email@company.com"</code></li>
+  <li>Add the public key to your GitHub account: Settings &gt; SSH and GPG keys &gt; New SSH key</li>
+  <li>Paste the contents of <code>~/.ssh/id_ed25519.pub</code></li>
+  <li>Test it works: <code>ssh -T git@github.com</code></li>
+</ol>
+
+<h2>Step 4: Run the Setup Tool</h2>
+
+<p>Type the following command and press Enter:</p>
+<pre><code>npx github:Ekwani-Consulting/netsuite-dev-setup</code></pre>
+
+<p>What to expect:</p>
+<ol>
+  <li><strong>Welcome screen</strong> - You'll see a banner that says "Ekwani Consulting - NetSuite Setup"</li>
+  <li><strong>Prerequisite checks</strong> - The tool checks if Node.js, npm, Git, and SuiteCloud CLI are installed. If SuiteCloud CLI is missing, it will ask to install it - type Y and press Enter.</li>
+  <li><strong>Project name</strong> - Type a name for your project (e.g., my-netsuite-project) and press Enter</li>
+  <li><strong>NetSuite login</strong> - The tool will ask to set up your NetSuite connection. Your web browser will open to the NetSuite login page. Log in, select your role (must have SuiteCloud Developer permissions), and click Allow. Return to your terminal.</li>
+  <li><strong>Git setup</strong> - The tool creates a Git repository and a private repo under the Ekwani-Consulting GitHub organization automatically.</li>
+</ol>
+
+<h1>2. Importing from NetSuite</h1>
+
+<p>After setup, pull existing scripts and customizations from NetSuite into your local project. Open the terminal in VS Code (<code>Ctrl + `</code> or Terminal &gt; New Terminal) and make sure you're inside your project folder.</p>
+
+<h2>See What Files Exist in NetSuite</h2>
+<pre><code>suitecloud file:list --folder "/SuiteScripts"</code></pre>
+<p>This lists all script files in your NetSuite account's SuiteScripts folder.</p>
+
+<h2>Import a Specific Script File</h2>
+<pre><code>suitecloud file:import --paths "/SuiteScripts/my_script.js"</code></pre>
+<p>Replace the path with the actual file path from the list above. The file downloads into your project's <code>src/FileCabinet/SuiteScripts/</code> folder.</p>
+
+<p>To import multiple files at once:</p>
+<pre><code>suitecloud file:import --paths "/SuiteScripts/script1.js" "/SuiteScripts/script2.js"</code></pre>
+
+<h2>See What Custom Objects Exist</h2>
+<pre><code>suitecloud object:list --type ALL</code></pre>
+<p>This lists custom records, fields, workflows, and other customizations in your account.</p>
+
+<h2>Import All Custom Objects</h2>
+<pre><code>suitecloud object:import --destinationfolder "/Objects" --type ALL --scriptid ALL</code></pre>
+<p>This downloads all custom objects into your project's <code>src/Objects/</code> folder as XML files.</p>
+
+<h2>Save Your Imports to Git</h2>
+<p>After importing, always commit your changes:</p>
+<pre><code>git add .
+git commit -m "Import existing scripts from NetSuite"
+git push</code></pre>
+<p>This saves everything to your Git repository so your teammates can see it too.</p>
+
+<h1>3. Pushing to NetSuite</h1>
+
+<p>When you've made changes locally and want to send them to the NetSuite sandbox, you have three options.</p>
+
+<h2>Upload a Single Script File</h2>
+<p>Use this for quick changes to one script:</p>
+<pre><code>suitecloud file:upload --paths "/FileCabinet/SuiteScripts/my_script.js"</code></pre>
+
+<div class="tip">
+<strong>Note:</strong> The path starts with <code>/FileCabinet/</code> - this is different from importing. Upload paths are relative to your project's <code>src/</code> folder. Import paths are relative to NetSuite's File Cabinet.
+</div>
+
+<h2>Push a Single Custom Object</h2>
+<p>Use this when you've changed one custom record, field, or workflow:</p>
+<pre><code>suitecloud object:update --scriptid customrecord_myrecord</code></pre>
+<p>Replace <code>customrecord_myrecord</code> with the actual script ID of the object you changed.</p>
+
+<h2>Deploy the Entire Project</h2>
+<p>Use this for bigger changes that involve multiple files and objects:</p>
+<pre><code>suitecloud project:deploy</code></pre>
+<p>This deploys everything listed in your <code>deploy.xml</code> file to the sandbox.</p>
+
+<div class="warning">
+<strong>Warning:</strong> Since everyone shares the same sandbox, let your team know before running <code>project:deploy</code>. A quick message in your team chat prevents surprises.
+</div>
+
+<h1>4. Git Workflow - Terminal</h1>
+
+<p>Git keeps track of all your changes and lets you collaborate with teammates without overwriting each other's work. Here's the daily workflow.</p>
+
+<h2>1. Create a Branch</h2>
+<p>Before making changes, create a new branch. Think of it as your own workspace:</p>
+<pre><code>git checkout -b add-customer-validation</code></pre>
+<p>Replace <code>add-customer-validation</code> with a short description of what you're working on. Use dashes instead of spaces.</p>
+
+<h2>2. Make Your Changes</h2>
+<p>Edit your files in VS Code. When you're done, check what changed:</p>
+<pre><code>git status</code></pre>
+<p>This shows which files you modified, added, or deleted.</p>
+
+<h2>3. Stage Your Changes</h2>
+<p>Tell Git which files to include in your next save point:</p>
+<pre><code>git add src/FileCabinet/SuiteScripts/my_script.js</code></pre>
+<p>To stage all changed files at once:</p>
+<pre><code>git add .</code></pre>
+
+<h2>4. Commit Your Changes</h2>
+<p>Save your staged changes with a descriptive message:</p>
+<pre><code>git commit -m "Add customer validation to sales order script"</code></pre>
+<p>Write your message as if completing the sentence: "This commit will..." Keep it clear and specific.</p>
+
+<h2>5. Switch Back to Main</h2>
+<p>When your work is done and tested, switch to the main branch:</p>
+<pre><code>git checkout main</code></pre>
+
+<h2>6. Pull Latest Changes</h2>
+<p>Get any changes your teammates have pushed while you were working:</p>
+<pre><code>git pull</code></pre>
+
+<h2>7. Merge Your Branch</h2>
+<p>Bring your changes into main:</p>
+<pre><code>git merge add-customer-validation</code></pre>
+
+<h2>8. Push to the Remote Repository</h2>
+<p>Send your changes to GitHub so everyone can see them:</p>
+<pre><code>git push</code></pre>
+
+<h2>What to Do If You See a Merge Conflict</h2>
+<p>Sometimes Git can't automatically combine your changes with a teammate's changes. You'll see a message like:</p>
+<pre><code>CONFLICT (content): Merge conflict in src/FileCabinet/SuiteScripts/my_script.js
+Automatic merge failed; fix conflicts and then commit the result.</code></pre>
+
+<div class="tip">
+Don't panic. Don't force-push. Ask your team lead or a teammate for help. Merge conflicts are normal and easy to resolve with guidance.
+</div>
+
+<h1>5. Git Workflow - GitHub Desktop</h1>
+
+<p>If you prefer a visual interface, GitHub Desktop does the same things as the terminal commands above.</p>
+
+<h2>Download GitHub Desktop</h2>
+<p>If you haven't already, download it from <a href="https://desktop.github.com">https://desktop.github.com</a> and sign in with your GitHub account. Signing in also sets up Git credentials for your terminal automatically.</p>
+
+<h2>1. Open Your Project</h2>
+<p>File &gt; Add Local Repository and select your project folder. Or if you've already cloned it, it should appear in the left sidebar.</p>
+
+<h2>2. Create a Branch</h2>
+<p>Click the <strong>Current Branch</strong> dropdown at the top of the window. Click <strong>New Branch</strong>. Type a name (e.g., add-customer-validation) and click <strong>Create Branch</strong>.</p>
+
+<h2>3. Make Your Changes</h2>
+<p>Edit files in VS Code as normal. When you switch back to GitHub Desktop, it will show your changes in the left sidebar. You can click on any file to see exactly what changed.</p>
+
+<h2>4. Commit Your Changes</h2>
+<p>At the bottom-left of the window:</p>
+<ol>
+  <li>Type a short summary (e.g., "Add customer validation to sales order script")</li>
+  <li>Click the <strong>Commit to [your-branch-name]</strong> button</li>
+</ol>
+
+<h2>5. Switch to Main</h2>
+<p>Click the <strong>Current Branch</strong> dropdown at the top and select <strong>main</strong>.</p>
+
+<h2>6. Pull Latest Changes</h2>
+<p>Click the <strong>Fetch origin</strong> button at the top. If there are new changes, it will change to <strong>Pull origin</strong> - click it to download them.</p>
+
+<h2>7. Merge Your Branch</h2>
+<p>Go to <strong>Branch</strong> menu &gt; <strong>Merge into current branch</strong>. Select your feature branch from the list and click <strong>Merge</strong>.</p>
+
+<h2>8. Push</h2>
+<p>Click the <strong>Push origin</strong> button at the top to send everything to GitHub.</p>
+
+<h2>Merge Conflicts in GitHub Desktop</h2>
+<p>Don't panic. If there's a conflict, GitHub Desktop will show a warning and list the conflicted files. Ask your team lead for help - they can walk you through resolving it in VS Code.</p>
+
+<h1>6. Quick Reference</h1>
+
+<table>
+  <tr><th>Task</th><th>Command</th></tr>
+  <tr><td>List script files</td><td><code>suitecloud file:list --folder "/SuiteScripts"</code></td></tr>
+  <tr><td>Import a script</td><td><code>suitecloud file:import --paths "/SuiteScripts/my_script.js"</code></td></tr>
+  <tr><td>Upload a script</td><td><code>suitecloud file:upload --paths "/FileCabinet/SuiteScripts/my_script.js"</code></td></tr>
+  <tr><td>List custom objects</td><td><code>suitecloud object:list --type ALL</code></td></tr>
+  <tr><td>Import all objects</td><td><code>suitecloud object:import --destinationfolder "/Objects" --type ALL --scriptid ALL</code></td></tr>
+  <tr><td>Update one object</td><td><code>suitecloud object:update --scriptid customrecord_myrecord</code></td></tr>
+  <tr><td>Deploy project</td><td><code>suitecloud project:deploy</code></td></tr>
+  <tr><td>Create a branch</td><td><code>git checkout -b my-feature</code></td></tr>
+  <tr><td>Stage changes</td><td><code>git add .</code></td></tr>
+  <tr><td>Commit</td><td><code>git commit -m "description"</code></td></tr>
+  <tr><td>Push</td><td><code>git push</code></td></tr>
+  <tr><td>Pull latest</td><td><code>git pull</code></td></tr>
+  <tr><td>Connect to NetSuite</td><td><code>suitecloud account:setup</code></td></tr>
+</table>
+
+<h1>7. Joining an Existing Project</h1>
+
+<p>If the project already exists and you're joining the team, you don't need the setup tool. Follow these steps instead.</p>
+
+<h2>1. Install Prerequisites</h2>
+<p>Make sure you have these installed:</p>
+<ul>
+  <li><strong>Node.js:</strong> download from <a href="https://nodejs.org">https://nodejs.org</a> (LTS version)</li>
+  <li><strong>Git:</strong> download from <a href="https://git-scm.com">https://git-scm.com</a></li>
+  <li><strong>SuiteCloud CLI:</strong> open your terminal and run: <code>npm install -g --acceptSuiteCloudSDKLicense @oracle/suitecloud-cli</code></li>
+  <li><strong>VS Code:</strong> download from <a href="https://code.visualstudio.com">https://code.visualstudio.com</a></li>
+  <li><strong>SuiteCloud Extension for VS Code:</strong> open VS Code, click the Extensions icon (left sidebar), search "SuiteCloud", install the one by Oracle</li>
+  <li><strong>GitHub Desktop (optional):</strong> download from <a href="https://desktop.github.com">https://desktop.github.com</a></li>
+</ul>
+
+<h2>2. Clone the Repository</h2>
+<pre><code>git clone https://github.com/Ekwani-Consulting/my-project.git</code></pre>
+<p>Replace the URL with the actual repository URL your team lead provides.</p>
+
+<h2>3. Open the Project</h2>
+<pre><code>cd my-project</code></pre>
+<p>Then open it in VS Code: File &gt; Open Folder and select the project folder.</p>
+
+<h2>4. Install Dependencies</h2>
+<p>If the project has a package.json file:</p>
+<pre><code>npm install</code></pre>
+
+<h2>5. Connect to NetSuite</h2>
+<p>Each developer needs to set up their own connection:</p>
+<pre><code>suitecloud account:setup</code></pre>
+<p>This opens your browser for NetSuite login. Follow the prompts to authenticate. This creates a <code>suitecloud.config.js</code> file on your machine only (it's not shared via Git).</p>
+
+<h2>6. Verify Your Connection</h2>
+<pre><code>suitecloud file:list --folder "/SuiteScripts"</code></pre>
+<p>If you see a list of files, you're connected and ready to work.</p>
+
+<h1>8. Rollback Guidance</h1>
+
+<h2>Something Went Wrong With a Deploy?</h2>
+
+<p>If a <code>project:deploy</code> caused issues in the sandbox:</p>
+<ol>
+  <li>Don't panic. The previous version of your code is safe in Git.</li>
+  <li>Tell your team so nobody else deploys on top of the problem.</li>
+  <li>Switch to the last known good state:
+    <pre><code>git checkout main
+git pull</code></pre>
+  </li>
+  <li>Re-deploy the good version:
+    <pre><code>suitecloud project:deploy</code></pre>
+  </li>
+</ol>
+
+<p>If you're not sure what the "good version" is, ask your team lead before deploying anything.</p>
+
+<div class="warning">
+Never force-push (<code>git push --force</code>) - this can erase your teammates' work. If Git won't let you push, ask for help.
+</div>
+
+<div class="footer">&copy;2022 Ekwani Consulting - For Internal Use Only</div>
+
+</body>
+</html>
