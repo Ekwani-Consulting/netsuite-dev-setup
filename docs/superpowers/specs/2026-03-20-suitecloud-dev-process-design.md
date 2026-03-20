@@ -40,10 +40,20 @@ The primary goal is to bring existing NetSuite customizations under source contr
 
 ### Package Details
 
-- **Name:** `@ekwani/netsuite-setup` (or `netsuite-setup` scoped to the org)
-- **Repository:** Ekwani Consulting GitHub organization (private)
+- **Package name:** `netsuite-setup`
+- **Repository:** `ekwani-consulting/netsuite-setup` (private, Ekwani Consulting GitHub org)
 - **Invocation:** `npx github:ekwani-consulting/netsuite-setup`
 - **Dependencies:** `inquirer` (interactive prompts), `chalk` (colored output)
+
+### GitHub Access Prerequisite
+
+Since the repository is private, developers must have GitHub access configured before running the `npx` command. The Developer Guide (Phase 0) will walk them through one of these options:
+
+1. **GitHub Desktop (recommended for beginners)** -- signing into GitHub Desktop automatically configures Git credentials on the machine via the Git credential manager. This is the simplest path.
+2. **HTTPS + Git Credential Manager** -- install Git Credential Manager (bundled with Git for Windows, available via Homebrew on macOS), then `git clone` any private repo once to trigger the browser login flow. Credentials are cached automatically.
+3. **SSH key** -- for more experienced developers who prefer SSH.
+
+The `npx github:` command uses Git under the hood, so any method that authenticates Git with GitHub will work.
 
 ### Repository Structure
 
@@ -92,24 +102,29 @@ If a prerequisite that cannot be auto-installed is missing, the script exits wit
 
 1. Prompt: "Set up NetSuite account connection now?" (Y/n)
 2. If yes, prompt for **authentication ID** (text input, suggest "sandbox" as default)
-3. Run: `suitecloud account:setup`
-4. Guide user: "Complete the login in your browser, then return here"
+3. Print guidance: "Your browser will open for NetSuite login. Complete the login, select your role, and click Allow. Then return here."
+4. Run: `suitecloud account:setup` (the CLI's own interactive flow handles the auth ID prompt and browser launch; the tool passes control to it directly)
 5. After completion, optionally verify by running: `suitecloud file:list --folder "/SuiteScripts"`
 6. Print success with account confirmation
 
+**Note:** The `suitecloud account:setup` command runs its own interactive prompts (including asking for the auth ID). The CLI tool collects the auth ID suggestion beforehand for guidance purposes, then delegates entirely to SuiteCloud's interactive flow. This avoids duplicating prompts or passing flags that may not be supported in interactive mode.
+
 #### Stage 5: Git Initialization & Push
 
-1. Run `git init` inside the project directory
+1. Run `git init -b main` inside the project directory (forces `main` as the default branch name regardless of the developer's Git version or config)
 2. Create `.gitignore` with:
    ```
    node_modules/
    .suitecloud-sdk/
    suitecloud.config.js
    ```
-3. Run `git add .` and `git commit -m "Initial project scaffold"`
-4. Prompt for **remote repository URL** (text input, e.g., `https://github.com/ekwani/my-project.git`)
-5. Run `git remote add origin <url>` and `git push -u origin main`
-6. Print success message
+3. Run `npm install` if a `package.json` with dependencies exists (SuiteCloud may scaffold one)
+4. Run `git add .` and `git commit -m "Initial project scaffold"`
+5. Prompt for **remote repository URL** (text input, e.g., `https://github.com/ekwani/my-project.git`)
+6. Run `git remote add origin <url>` and `git push -u origin main`
+7. Print success message
+
+**Note on `suitecloud.config.js` in `.gitignore`:** This file stores the developer's local authentication ID. It is gitignored because each developer authenticates independently. The "Joining an Existing Project" section of the Developer Guide covers how new developers set up their own connection after cloning.
 
 #### Completion
 
@@ -175,6 +190,8 @@ Commands covered with guidance on when to use each:
 
 Includes a warning about coordinating deployments to the shared sandbox.
 
+**Note on file paths:** Import paths (e.g., `/SuiteScripts/my_script.js`) are relative to the NetSuite File Cabinet. Upload paths (e.g., `/FileCabinet/SuiteScripts/my_script.js`) are relative to the local project's `src/` folder. The guide will clearly explain this distinction with examples.
+
 #### Git Workflow -- Terminal
 
 Step-by-step commands for the daily workflow:
@@ -184,10 +201,13 @@ Step-by-step commands for the daily workflow:
 3. **Stage changes:** `git add src/FileCabinet/SuiteScripts/my_script.js`
 4. **Commit:** `git commit -m "Add customer validation script"`
 5. **Switch to main:** `git checkout main`
-6. **Merge:** `git merge my-feature-branch`
-7. **Push:** `git push`
+6. **Pull latest changes:** `git pull` (get any changes your teammates pushed)
+7. **Merge:** `git merge my-feature-branch`
+8. **Push:** `git push`
 
 Each command includes a one-line explanation of what it does.
+
+Includes a "What to do if you see a merge conflict" callout: stop, do not force-push, and ask a teammate or lead for help. Brief explanation of what a conflict looks like in the terminal.
 
 #### Git Workflow -- GitHub Desktop
 
@@ -197,11 +217,14 @@ The same operations described as GUI actions:
 2. **Create a branch** -- Branch menu > New Branch
 3. **View changes** -- left sidebar shows modified files
 4. **Commit** -- type message in bottom-left, click Commit button
-5. **Switch branches** -- dropdown at top of window
-6. **Merge** -- Branch menu > Merge into current branch
-7. **Push** -- click "Push origin" button
+5. **Switch branches** -- dropdown at top of window, select `main`
+6. **Pull latest** -- click "Fetch origin" / "Pull origin" to get teammates' changes
+7. **Merge** -- Branch menu > Merge into current branch
+8. **Push** -- click "Push origin" button
 
-Each step described as a UI action with expected result.
+Each step described as a UI action with expected result. Includes a note on how GitHub Desktop surfaces merge conflicts visually and what to do (ask for help).
+
+**Note:** The Developer Guide will include a brief section on downloading and installing GitHub Desktop (desktop.github.com) at the start of this section, with a note that signing in also configures Git credentials for the terminal.
 
 #### Quick Reference
 
@@ -218,10 +241,31 @@ A single table with two columns:
 | Stage changes | `git add file-path` |
 | Commit | `git commit -m "description"` |
 | Switch to main | `git checkout main` |
+| Pull latest changes | `git pull` |
 | Merge branch | `git merge branch-name` |
 | Push to remote | `git push` |
 
 No explanations -- just copy-paste commands.
+
+#### Joining an Existing Project
+
+For developers joining after the initial setup (cloning an existing repo):
+
+1. **Install prerequisites** -- Node.js, npm, Git, SuiteCloud CLI (same as Phase 0)
+2. **Clone the repository:** `git clone <repo-url>`
+3. **Navigate into the project:** `cd <project-name>`
+4. **Run `npm install`** if a `package.json` exists
+5. **Set up NetSuite connection:** `suitecloud account:setup` (each developer authenticates independently -- this creates their own `suitecloud.config.js` which is gitignored)
+6. **Verify connection:** `suitecloud file:list --folder "/SuiteScripts"`
+
+This section will be written clearly so a new team member can go from zero to connected without needing the CLI setup tool.
+
+#### Rollback Guidance
+
+A brief "Something went wrong with a deploy?" section:
+
+- If a `project:deploy` causes issues in the sandbox, explain how to revert: check out a known-good commit (`git checkout main`), verify the files, and re-deploy
+- Emphasize: do not panic, do not force-push, communicate with the team
 
 ---
 
