@@ -1,0 +1,23 @@
+{
+  "name": "netsuite-setup",
+  "version": "1.0.0",
+  "description": "Interactive CLI to scaffold a NetSuite SuiteCloud development environment",
+  "bin": {
+    "netsuite-setup": "./bin/index.js"
+  },
+  "scripts": {
+    "test": "jest"
+  },
+  "dependencies": {
+    "chalk": "^4.1.2",
+    "inquirer": "^8.2.6"
+  },
+  "devDependencies": {
+    "jest": "^29.7.0"
+  },
+  "engines": {
+    "node": ">=16.0.0"
+  },
+  "license": "UNLICENSED",
+  "private": true
+}
